@@ -1,0 +1,164 @@
+enum state_t { S_1 , S_2 };
+enum state_t state = S_1 ;
+
+
+switch ( state )
+{
+...
+    case S_k :
+        if ( input_k_1 )
+        {
+        state = S_1 ;
+        output_k_1 ;
+        }
+        else if ( input_k_2 )
+        {
+        state = S_2 ;
+        output_k_2 ;
+        }
+        ...
+        else if ( input_k_n )
+        {
+        state = S_n ;
+        output_k_n ;
+        }
+    break ;
+...
+}
+
+
+
+
+typedef enum state {
+    locked = 0,
+    num1,
+    num2,
+    broken,
+    unlocked
+} STATE;
+
+
+int main()
+{
+    STATE stanje = locked;
+    int num = 0;
+    int code = 123;
+
+    switch (stanje) {
+        case locked:
+            {
+                scanf("%d",&num);
+                if (num == 1) {
+                    stanje = num1;
+                } else {
+                    stanje = broken;
+                }
+            }
+        case num1:
+        {
+         scanf("%d",&num);
+                if (num == 2) {
+                    stanje = num2;
+                } else {
+                    stanje = broken;
+                }
+        }
+        case num2:
+        {
+         scanf("%d",&num);
+                if (num == 3) {
+                    stanje = unlocked;
+                    printf("unlocked");
+                } else {
+                    stanje = broken;
+                }
+        }
+        break;
+        default:
+        break;
+    }
+
+Mašine stanje se često koriste i za ostvarivanje naizgled istovremenog izvršavanja
+više različitih funkcija. Naime, njihovom upotrebom je moguće ostvariti pseudo-
+paralelni rad (eng. pseudo-multitasking) na embeded platformama bez upotrebe
+prekida i operativnog sistema.
+Osnovna ideja pristupa se zasniva na particionisanju programa na više nezavisnih
+zadataka (stanja) koji se izvršavaju ciklično u vremenskom multipleksu, gde se u
+svakom trenutku izvršava samo jedan zadatak, pri čemu je prioritet izvršavanja
+svakog zadatka isti. Zapravo, ovaj način izvršavanja predstavlja poznatu round-
+robin softversku arhitekturu
+
+
+
+/******************************************************************************
+
+                           Masina stanja sa pokazivacima na fje
+
+*******************************************************************************/
+
+#include <stdio.h>
+#include<stdlib.h>
+#define swap(a,b) { a ^= b; b ^= a; a ^= b;}
+#define set(a,pos) a |= (1 << pos)
+
+typedef enum stanja { STANJE1, STANJE2, STANJE3} STANJE;
+
+typedef struct masina {
+    STANJE stanje;
+    void (*akicja) (void);
+} MASINA;
+
+STANJE trenutno_stanje = STANJE1;
+
+void nesto1() {
+    printf("%d",trenutno_stanje);
+    //ovde menja trenutno_stanje
+    trenutno_stanje=STANJE2;
+}
+
+void nesto2() {
+    printf("%d",trenutno_stanje);
+    trenutno_stanje=STANJE3;
+}
+
+void nesto3() {
+    printf("%d",trenutno_stanje);
+    trenutno_stanje=STANJE1;
+}
+
+
+
+int main()
+{
+    MASINA * masinica = (MASINA *)malloc(sizeof(MASINA) * 3); //3 stanja
+
+    masinica->stanje = trenutno_stanje;
+    masinica->akicja = &nesto1;
+
+
+
+    while(1) {
+        masinica->akicja();
+        masinica->stanje = trenutno_stanje;
+        if (trenutno_stanje == 0) {
+            masinica->akicja = nesto1;
+        } else if (trenutno_stanje == 1) {
+            masinica->akicja = nesto2;
+        } else {
+            masinica->akicja = nesto3;
+        }
+    }
+
+}
+
+//////////////
+
+struct student {
+    char name[50];
+    int id;
+    float gpa;
+};
+
+int main() {
+    struct student s1; // statically allocate memory for struct student
+

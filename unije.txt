@@ -1,0 +1,28 @@
+Unions are also sometimes used to implement pseudo-polymorphism in C,
+ by giving a structure some tag indicating what type of object it contains,
+  and then unioning the possible types together:
+
+enum Type { INTS, FLOATS, DOUBLE };
+struct S
+{
+  Type s_type;
+  union
+  {
+    int s_ints[2];
+    float s_floats[2];
+    double s_double;
+  };
+};
+
+
+Unions are often used to convert between the binary representations of integers and floats:
+
+union
+{
+  int i;
+  float f;
+} u;
+
+// Convert floating-point bits to integer:
+u.f = 3.14159f;
+printf("As integer: %08x\n", u.i);

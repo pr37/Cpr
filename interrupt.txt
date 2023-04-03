@@ -1,0 +1,114 @@
+Interrupt service routines (ISRs) are designed to handle asynchronous events (foreground events).
+
+No. It is not able to move a parameter and have the ISR return a value. The ISR does not accept any parameters
+ and does not return anything. When a software or hardware event takes place and the code doesn't really call
+ an ISR, it is called instead. No parameters are therefore supplied into an ISR. There is no contact code to
+ access the ISR's returned values because the code does not call the ISR. An ISR does not therefore return any
+ value.
+12. What does "interrupt latency" mean to you?
+
+The amount of clock cycles that the processor needs to reply to an interruption request is known as the interrupt
+ latency. This clock cycle counts the number of clock cycles between the assertions in the interrupt request and
+  the first instruction in the interrupt handler.
+
+An interrupt is a signal to the processor emitted by hardware or software indicating an event that needs immediate
+attention. Whenever an interrupt occurs, the controller completes the execution of the current instruction and
+starts the execution of an Interrupt Service Routine (ISR) or Interrupt Handler. ISR tells the processor or
+controller what to do when the interrupt occurs. The interrupts can be either hardware interrupts or software
+interrupts.
+
+Hardware Interrupt
+
+A hardware interrupt is an electronic alerting signal sent to the processor from an external device, like
+ a disk controller or an external peripheral. For example, when we press a key on the keyboard or move the
+  mouse, they trigger hardware interrupts which cause the processor to read the keystroke or mouse position.
+
+Software Interrupt
+
+A software interrupt is caused either by an exceptional condition or a special instruction in the instruction
+set which causes an interrupt when it is executed by the processor. For example, if the processor's arithmetic
+ logic unit runs a command to divide a number by zero, to cause a divide-by-zero exception, thus causing the
+ computer to abandon the calculation or display an error message. Software interrupt instructions work similar
+ to subroutine calls.
+
+Interrupt Service Routine
+
+For every interrupt, there must be an interrupt service routine (ISR), or interrupt handler. When an interrupt
+occurs, the microcontroller runs the interrupt service routine. For every interrupt, there is a fixed location
+in memory that holds the address of its interrupt service routine, ISR.
+The table of memory locations set aside to hold the addresses of ISRs is called as the Interrupt Vector Table.
+
+Steps to Execute an Interrupt
+
+When an interrupt gets active, the microcontroller goes through the following steps −
+
+    The microcontroller closes the currently executing instruction and saves the address of the next instruction
+    (PC) on the stack.
+
+    It also saves the current status of all the interrupts internally (i.e., not on the stack).
+
+    It jumps to the memory location of the interrupt vector table that holds the address of the interrupts
+     service routine.
+
+    The microcontroller gets the address of the ISR from the interrupt vector table and jumps to it.
+    It starts to execute the interrupt service subroutine, which is RETI (return from interrupt).
+
+    Upon executing the RETI instruction, the microcontroller returns to the location where it was interrupted.
+     First, it gets the program counter (PC) address from the stack by popping the top bytes of the stack into
+
+     the PC. Then, it start to execute from that address.
+
+Interrupt inside Interrupt
+
+What happens if the 8051 is executing an ISR that belongs to an interrupt and another one gets active? In such cases, a high-priority interrupt can interrupt a low-priority interrupt. This is known as interrupt inside interrupt.
+
+28. How can you handle interrupt service routines in embedded systems and ensure they have predictable execution
+ times?
+
+Handling ISRs in embedded systems requires careful consideration of the system architecture and the design
+of the ISRs. The following are some ways for ensuring that ISRs have predictable execution times:
+
+    The ISR code should be kept as small and concise as possible, to minimize the amount of time spent in
+    the ISR and to ensure that it can be executed quickly.
+
+    The priority of the ISRs should be set correctly so that critical ISRs are executed before less important
+     ones. This ensures that critical operations are performed promptly, even in the presence of multiple ISRs.
+
+    Blocking operations, such as waits, semaphores, and locks, should be avoided in ISRs. They can cause
+    unpredictable execution times and may lead to system deadlocks.
+
+    DMA(Direct Memory Access) can be used to transfer data to and from peripherals, offloading the processor
+     and allowing the ISRs to return quickly.
+
+    Cooperative multitasking, also known as round-robin scheduling, can be used to ensure that each task,
+    including ISRs, has a predictable amount of time to execute.
+
+
+ Interrupts
+
+ 11. Interrupts are an important part of embedded systems. Consequently, many compiler vendors offer an extension
+  to standard C to support interrupts. Typically, this new key word is __interrupt. The following code
+  uses __interrupt to define an interrupt service routine. Comment on the code.
+
+ __interrupt double compute_area(double radius) {
+ double area = PI * radius * radius;
+
+ printf(“nArea = %f”, area);
+
+ return area;
+
+ }
+
+ This function has so much wrong with it, it’s almost tough to know where to start.
+
+ (a) Interrupt service routines cannot return a value. If you don’t understand this, then you aren’t hired.
+
+ (b) ISR’s cannot be passed parameters. See item (a) for your employment prospects if you missed this.
+
+ (c) On many processors / compilers, floating point operations are not necessarily re-entrant.
+ In some cases one needs to stack additional registers, in other cases, one simply cannot do floating
+ point in an ISR. Furthermore, given that a general rule of thumb is that ISRs should be short and sweet, one wonders about the wisdom of doing floating point math here.
+
+ (d) In a similar vein to point (c), printf() often has problems with reentrancy and performance.
+ If you missed points (c) & (d) then I wouldn’t be too hard on you. Needless to say, if you got these two
+ points, then your employment prospects are looking better and better.

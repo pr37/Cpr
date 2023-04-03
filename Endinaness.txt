@@ -1,0 +1,72 @@
+A big-endian system stores the most significant byte of a word at the smallest memory address and the least significant byte at the largest.
+A little-endian system, in contrast, stores the least-significant byte at the smallest address
+
+0A0B0C0D
+
+mem      BIG         LITTLE
+a:        0A           0D
+a+1:      0B           0C
+a+2:      0C           0B
+a+3:      0D           0A
+
+Big-endianness is the dominant ordering in networking protocols, such as in the internet protocol suite,
+ where it is referred to as network order, transmitting the most significant byte first. Conversely,
+  little-endianness is the dominant ordering for processor architectures (x86, most ARM implementations,
+  base RISC-V implementations) and their associated memory.
+
+  As a convention, network (including bus) data is big endian. Your PC architecture is probably little endian.
+
+  In order to fix this, pass your data to ntoh*() functions to reverse its byte order (if necessary)
+  from network (n) to host (h) endianness.
+
+
+  Suppose we are on a 32-bit machine.
+
+  If it is little endian, the x in the memory will be something like:
+
+         higher memory
+            ----->
+      +----+----+----+----+
+      |0x01|0x00|0x00|0x00|
+      +----+----+----+----+
+      A
+      |
+     &x
+
+  so (char*)(&x) == 1, and *y+48 == '1'. (48 is the ascii code of '0')
+
+  If it is big endian, it will be:
+
+      +----+----+----+----+
+      |0x00|0x00|0x00|0x01|
+      +----+----+----+----+
+      A
+      |
+     &x
+
+  so this one will be '0'.
+
+Check endiness:
+int main()
+{
+  int x = 1;
+
+  unsigned char *y = (unsigned char*)&x;  //kastuj int na char tako da dobijes prvi bajt od inta
+
+  printf("%c\n",*y+48); //ako je prvi bajt 1 onda je litl endian, +48 je +0 da bi predstavio u acsii
+
+  //return (test_endian[0] == 0);
+}
+
+    Big-endian: The IBM PowerPC architecture, some versions of the SPARC architecture,
+     and some versions of the Motorola 68000 family of processors (including the 68000, 68010, and 68020).
+
+    Little-endian: Most x86-based processors (including Intel and AMD processors),
+     the ARM architecture, and the MIPS architecture (although MIPS can also operate in big-endian mode).
+
+
+    Standardize on a single byte order: If all systems involved in data transfer use the same byte order, there won't be any byte order issues. For example, the network byte order is standardized to be big-endian, so network protocols can be designed to always use this byte order.
+
+    Use byte order conversion functions: If data needs to be transferred between systems with different byte orders, conversion functions can be used to convert the data to the appropriate byte order. Many programming languages provide built-in functions for this purpose, such as the htons() and ntohs() functions in C for converting between host byte order and network byte order.
+
+    Use a platform-independent data format: Another strategy is to use a platform-independent data format, such as XML or JSON, for data transfer. These formats use a standardized representation of data that is independent of byte order, so there are no byte order issues to worry about. However, using these formats can come with other trade-offs, such as increased overhead or reduced performance.

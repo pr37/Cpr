@@ -1,0 +1,101 @@
+<string.h>
+
+strcpy	copy a string
+strcat	concatenate two strings
+strlen	get string length
+strchr	string scanning operation
+strcmp	compare two strings
+strncat	concatenate one string with part of another
+strncmp	compare parts of two strings
+strncpy	copy part of a string
+strrchr	string scanning operation
+
+
+char * str = "aa";
+char str[3] = "aa";
+char str[3] = { 'a', 'a', '\0' }
+
+strlen(str)
+strcpy(str3, str1);  //kopira str1 u str3
+strcat(str1, str2);  //konkatenacija
+
+
+
+    strncmp(str1, str2, n) : This function is used to compare the two strings.
+    strncpy(str1, str2, n): This function is used to copy a string from another string. Copies the first n characters of str2 to str1
+    strchr(str1, c): This function is used to returns a pointer to the first occurrence of char c in str1, or NULL if character not found.
+    strrchr(str1, c): This function searches str1 in reverse and returns a pointer to the position of char c in str1, or NULL if character not found.
+    strstr(str1, str2): This function returns a pointer to the first occurrence of str2 in str1, or NULL if str2 not found.
+    strncat(str1, str2, n) : This function joins first n characters of str2 to the end of str1 and returns a pointer to str1.
+    strlwr() : This function used to convert string to lower case
+    strupr() : This function used to convert string to upper case
+    strrev() : This function used to reverse string
+
+    int atoi(const char *str); //string u broj STDLIB
+    long atol(const char *);
+    long long atoll(const char *);
+    double atof(const char*);
+
+    int sprintf(str, "%d", 5) // broj u string STDIO
+
+    void anotheratoi(const char * str, int len) {
+        int i;
+        int res = 0;
+        while (str[i] != '\0') {
+            res += pow(10,(len-i-1)) * ((int)(str[i])-48);
+            i++;
+        }
+        printf("res: %d", res);
+    }
+
+
+We must know a string is an array of characters that ends with a null character \0. zato za 1 veci niz
+
+
+void reverse_string(char * str, char *newstr) {
+    if (str == NULL) {
+        return;
+    }
+    int str_len = 0;
+    while (str[str_len] != '\0') {
+        str_len++;
+    }
+    int i;
+    int b = 0;
+    for(i = str_len-1; i >= 0; i--) {
+        newstr[b] = str[i];
+        b++;
+    }
+    newstr[str_len] = '\0';
+}
+
+
+Good video, but I like to also add that    char msg[] ="hello";
+is just shorthand  for
+char msg[] ={'h', 'e', 'l', 'l', 'o', '\0'};
+There are no such things as strings
+in C.      Only char arrays  or
+character arrays.  And the address of  first character of the  char array is
+fixed ,  it is a constant pointer,    &msg[0] and  msg mean the same thing.  And msg and
+msg + 0 is also the same , you can't change the  base address of the array, it is suck in memory.  It makes
+sense , lets say you had this :
+char s[]="car";
+then decided to change it to
+s =
+"abcdefghijklmnopqrstuvwxyz123456789134566778889abcdefghijklmnopqrstuvwxyz"  ;
+The compiler would have to find a  large amount of memory for this new change  in size.
+And there might not be enough memory for this new  sudden change in size.   Therefore  a array's
+starting address being fixed is a good safeguard.
+   Therefore the base address of any
+array in C  is fixed, it is a constant.
+   This applys to all arrays in  C , for example:
+int a[]={1,2,3};
+int b[={4,5,6};
+you can't do this
+a= b;       ////// same as a= &b[0] ;
+// because you are changing the starting or base address of the integer array called a .  The address of a is fixed, and will remain fixed for the entire program.
+     But I can do this ,
+int *p = a;  /////  int *p =&a[0];
+then later I can change the int pointer to point to array b
+p = b;     //////   because  p is a
+pointer variable that can  point to any variable or  any array as long as it has the same data type , as the variable or array , that it is pointing,  or  refering to.    Pointer variables  can point to any variable of the same type.  Again as I said earlier ,  char arrays or C-strings are  character arrays only  , there is no such thing as a string in C ,  they are not  String objects like Java ,  or String objects like C++ or C#  .

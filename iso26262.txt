@@ -1,0 +1,58 @@
+ISO 26262 is a safety standard for the automotive industry that provides guidelines for the development
+ of safety-critical systems. It addresses the functional safety of electrical and/or electronic systems
+ in passenger cars up to 3.5 tons. The standard defines four automotive safety integrity levels (ASILs)
+ based on the severity of potential harm, and outlines the requirements and processes for achieving these
+ levels of safety. The standard covers the entire product lifecycle, from concept and development through
+ production, operation, maintenance, and decommissioning. It requires that all safety-related aspects of a
+  system be identified and documented, and that measures be taken to ensure that these aspects are properly
+  implemented, verified, and validated. The goal of ISO 26262 is to reduce the risk of accidents and injuries
+  resulting from failures of safety-critical systems in cars.
+
+
+  ISO 26262 applies to all safety-related systems in the automotive industry, including electronic control units (ECUs), sensors, actuators, and communication systems. Here are some examples of safety-critical systems in cars that must comply with the standard:
+
+      Anti-lock braking systems (ABS): These systems prevent the wheels from locking up during hard braking, improving vehicle stability and control. ABS is considered safety-critical because it can affect the vehicle's ability to stop in an emergency.
+
+      Adaptive cruise control (ACC): This system automatically adjusts the vehicle's speed to maintain a safe distance from the vehicle ahead. ACC relies on sensors and actuators to control the throttle and brakes, making it safety-critical.
+
+      Lane departure warning (LDW): This system alerts the driver if the vehicle is drifting out of its lane without a turn signal. LDW uses cameras or sensors to detect lane markings and is considered safety-critical because it can help prevent collisions.
+
+      Electric power steering (EPS): This system replaces hydraulic power steering with an electric motor, providing improved fuel efficiency and easier handling. EPS is safety-critical because it affects the vehicle's steering and stability.
+
+  These are just a few examples of safety-critical systems in cars that must meet the requirements of ISO 26262.
+
+
+  There are four ASIL levels, each with different requirements for the level of risk mitigation:
+
+      ASIL A: The lowest level of risk, where failure of the safety-critical function would result in only minor injuries or property damage.
+
+      ASIL B: The risk level is higher than ASIL A, and failure of the safety-critical function could result in serious injuries or fatalities.
+
+      ASIL C: The risk level is higher than ASIL B, and failure of the safety-critical function could result in severe or life-threatening injuries.
+
+      ASIL D: The highest level of risk, where failure of the safety-critical function would result in catastrophic events, such as multiple fatalities or the loss of an entire vehicle.
+
+
+ASIL A:
+
+    Interior lighting control
+    Audio system control
+    Display screen control
+
+ASIL B:
+
+    Power window control
+    Electronic stability control
+    Airbag deployment system
+
+ASIL C:
+
+    Adaptive cruise control
+    Lane departure warning system
+    Brake-by-wire system
+
+ASIL D:
+
+    Autonomous emergency braking system
+    Steering-by-wire system
+    Electric powertrain control system

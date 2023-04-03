@@ -1,0 +1,44 @@
+<stdlib.h>
+
+ptr = (cast-type*) malloc(byte-size)
+ptr = (int*) malloc(100 * sizeof(int));
+if (ptr == NULL) {
+        printf("Memory not allocated.\n");
+        exit(0);
+
+
+ptr = (cast-type*)calloc(n, element-size);
+n is the no. of elements and element-size is the size of each element
+t initializes each block with a default value ‘0’.
+ptr = (float*) calloc(25, sizeof(float));
+
+
+free(ptr);
+
+
+ptr = realloc(ptr, newSize);
+re-allocation of memory maintains the already present value and new blocks will be initialized with the default garbage value.
+ptr = realloc(ptr, n * sizeof(int));
+
+//compares the first n bytes of memory area str1 and memory area str2.
+//kada memcmp strukture mozda nece biti jednake-0 zbog paddinga
+int memcmp(const void *str1, const void *str2, size_t n)
+    if Return value < 0 then it indicates str1 is less than str2.
+    if Return value > 0 then it indicates str2 is less than str1.
+    if Return value = 0 then it indicates str1 is equal to str2.
+
+
+char str1[15];
+memcpy(str1, "abcdef", 6);
+
+
+
+In C, heap memory is allocated using functions such as malloc() and calloc(). If you use up all the available heap memory, several things can happen:
+
+    Heap overflow: If you try to allocate more memory than is available on the heap, your program will crash with a heap overflow error. This happens because the operating system cannot allocate any more memory to your program.
+
+    Memory leaks: If you allocate memory but never free it, your program will continue to use more and more memory until it runs out. This is called a memory leak. Over time, memory leaks can cause your program to slow down or crash.
+
+    Performance degradation: If you repeatedly allocate and deallocate memory, your program's performance may degrade. This is because the operating system needs to manage the memory and may spend more time searching for free memory to allocate.
+
+    Undefined behavior: If you attempt to use memory that has not been properly allocated, your program may exhibit undefined behavior. This can include crashes, data corruption, or other unexpected behavior.

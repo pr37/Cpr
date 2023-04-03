@@ -1,0 +1,16 @@
+file.c -> predprocesiranje -> file.i -> compiler -> file.s(asembly file) -> asembly -> file.o -> linker -> file.exe
+
+Objektna datoteka sadrzi:
+-masinski kod
+-inicijalizovane podatke-static promenjive
+-tabelu simbola
+-relokacione informacije
+-debag info
+
+
+obj datoteka je binarno zapisana ne moze se citati kao txt
+
+tri nacina povezivanja:
+-staticko povezivanje
+-dinamicko povezivanje tokom punjenja
+-dinamicko povezivanje tokom izvrsavanja - nema spoljne fje

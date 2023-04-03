@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <limits.h>
+#include "vidljivost.h"
+
+/*
+ * Predprocesor (brise komentare, procesira makroe, inkluduje fajlove) -> .i
+ * Kompajler () -> .obj
+ * Linker () -> .exe
+ *
+ *
+ *  # is know as Stringize or number-sign.
+
+When # is used within a macro definition, # macro converts a macro parameter into a string constant.
+
+When we are passing any special arguments or string as a parameter value, then # macrons are get used.
+ * */
+
+int32_t globalna;  //cak i ne moras da je navedes ovde
+
+#define macrofja(n,position) (n |= 1<<position)
+#define IS_POWER_OF_TWO(x) ((x) != 0 && ((x) & ((x) - 1)) == 0)
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define swap(a,b) do { typeof(b) c = b; b = a; a = c; } while(0)
+#define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
+#define ABS(x) ((x < 0) ? -x : x)
+#define IS_POWER_2(x) ( (x) && !( x & (x-1)))
+#define TOKENTOSTRING(a) #a
+#define preprocessor(n) printf ("macro" #n " = %d", macro##n)
+#define FlipAllBits(n) (~(n))
+
+#define PRINT(i, limit)                                    \
+    while (i < limit) {                                    \
+        printf("GeeksQuiz ");                              \
+        i++;                                               \
+    }
+
+void print_binary(uint32_t num) {
+    int_fast32_t i;
+    for(i=sizeof(uint32_t) * CHAR_BIT - 1 ;i>=0;i--) {
+        putchar(num & (1 << i) ? '1' : '0');
+    }
+}
+
+#define LIMIT 100
+
+int main(void) {
+#undef LIMIT
+#if VERBOSE >= 2
+    printf("Trace Message");
+#endif
+
+#ifdef  LIMIT
+    printf("%s","ok")
+#endif
+
+    printf("%d",globalna);
+    printf("%d",globalna2);
+    printf("%d",globalna3);
+    return 0;
+}

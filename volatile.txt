@@ -1,0 +1,140 @@
+In C, volatile is a type qualifier that informs the compiler that a variable's value may be changed
+by something external to the program, and that the variable should not be optimized away by the compiler.
+
+Specifically, the volatile keyword tells the compiler to generate code that always reads or writes the
+value of a variable from or to memory, even if the value may not have changed since the last read or write.
+ This is important for variables that are shared between multiple threads or are accessed by hardware devices.
+
+For example, consider a variable x that is updated by an interrupt service routine (ISR) in an embedded system:
+
+
+volatile int x = 0;
+
+void ISR() {
+  x++;
+}
+
+In this case, we declare x as volatile to tell the compiler that its value may change outside of the normal
+control flow of the program. Without the volatile keyword, the compiler may optimize away reads or writes to x,
+ assuming that its value is unchanged. This could lead to incorrect behavior if the ISR updates x between reads
+  or writes.
+
+Another common use case for volatile in C is with I/O operations. For example, if a program needs to read from
+or write to a memory-mapped I/O device, the corresponding memory addresses should be declared as volatile to
+ensure that the compiler generates the appropriate read and write instructions.
+
+c
+
+volatile unsigned char* io_device = (unsigned char*)0x1234;
+
+void write_to_device(unsigned char value) {
+  *io_device = value;
+}
+
+unsigned char read_from_device() {
+  return *io_device;
+}
+
+In this example, we declare io_device as volatile to ensure that the compiler generates the appropriate instructions to read from or write to the device. Without the volatile keyword, the compiler may optimize away the reads or writes, assuming that the value of io_device is unchanged.
+
+In summary, volatile is a type qualifier in C that tells the compiler to generate code that always reads or writes the value of a variable from or to memory, even if the value may not have changed since the last read or write. This is important for variables that may be changed outside of the normal control flow of the program, such as those shared between threads or accessed by hardware devices.
+Dragana Trivunović
+so when should I use volatile
+
+You should use volatile in C when a variable's value may be changed by something external to the program, and when you need to ensure that the variable is always read or written to memory, rather than being optimized away by the compiler.
+
+Some common use cases for volatile include:
+
+    Shared memory between threads: If a variable is shared between threads in a multi-threaded program, you should declare it as volatile to ensure that the compiler generates the appropriate instructions to read and write its value from or to memory.
+
+    Interrupt service routines (ISRs): If a variable is updated by an ISR, you should declare it as volatile to ensure that the compiler generates the appropriate instructions to read and write its value from or to memory.
+
+    Memory-mapped I/O devices: If a variable is used to read from or write to a memory-mapped I/O device, the corresponding memory addresses should be declared as volatile to ensure that the compiler generates the appropriate instructions to read and write from or to memory.
+
+In general, you should use volatile whenever you need to ensure that a variable's value is always read or written to memory, rather than being optimized away by the compiler.
+
+///If the volatile qualifier qualifies an object, the compiler will reload the value from memory each time the program accesses it. Reading the value from memory is the only way to check the unpredictable change of the value.
+The volatile keyword is mainly used when we have to deal with GPIO, interrupt or flag Register directly. It is also used with a global variable or buffer shared between the threads.
+GPIO stands for General Purpose Input/Output.
+The FLAGS register is the status register that contains the current state of a x86 CPU. The size and meanings of the flag bits are architecture dependent. It usually reflects the result of arithmetic operations as well as information about restrictions placed on the CPU operation at the current time.
+
+Yes, a variable can be both constant and volatile in C. we can use constant and volatile both variables together. The volatile and const variable together is used at the time of accessing the GPIO registers. In this case, its value is changed by the 'external factors' if a switch or any output device is attached with GPIO. In this situation, the volatile variable is important because it ensures that the compiler always read the value from the GPIO address and avoids making any assumption.
+
+
+volatile int x;
+
+int fja() {
+    x = 5;      //kompajler bi optimizovao ovo tako sto bi vratio samo 5 i izbacio bi ovu liniju
+    return x;
+}
+
+volatine uint8_t * const reg = (uint8_t volatile *)0x12345678 (adresa iz koje citamo);
+konverzija iz celog broja u pokazivace nije definisana standardom ali jeste na spec arhitekturi
+const reg - ne zelimo da menjamo nikad tu adresu
+const * - sadrzaj se menja u adresi ali nas kod samo moze da cita vrednosti
+
+volatile const uint8_t * const reg = (uint8_t *)0x12345678
+
+
+. What does the keyword volatile mean? Give three different examples of its use.
+
+A volatile variable is one that can change unexpectedly. Consequently, the compiler can make no assumptions
+ about the value of the variable. In particular, the optimizer must be careful to reload the variable every
+ time it is used instead of holding a copy in a register. Examples of volatile variables are:
+
+(a) Hardware registers in peripherals (e.g., status registers)
+
+(b) Non-stack variables referenced within an interrupt service routine.
+
+(c) Variables shared by multiple tasks in a multi-threaded application.
+
+(a) Can a parameter be both const and volatile? Explain your answer.
+
+(b) Can a pointer be volatile? Explain your answer.
+
+(c) What is wrong with the following function?:
+
+int square(volatile int *ptr)
+
+{
+return *ptr * *ptr;
+
+}
+
+The answers are as follows:
+
+(a) Yes. An example is a read only status register. It is volatile because it can change unexpectedly. It is const because the program should not attempt to modify it.
+
+(b) Yes. Although this is not very common. An example is when an interrupt service routine modifies a
+pointer to a buffer.
+
+(c) This one is wicked. The intent of the code is to return the square of the value pointed to by *ptr.
+ However, since *ptr points to a volatile parameter, the compiler will generate code that looks something
+ like this:
+
+int square(volatile int *ptr)
+
+{
+int a,b;
+
+a = *ptr;
+
+b = *ptr;
+
+return a * b;
+
+}
+
+Since it is possible for the value of *ptr to change unexpectedly, it is possible for a and b to be different.
+ Consequently, this code could return a number that is not a square! The correct way to code this is:
+
+
+
+long square(volatile int *ptr)
+
+{
+int a;
+a = *ptr;
+return a * a;
+
+}

@@ -1,0 +1,127 @@
+u char   0-255   1b
+char     -128-127 1b
+int    -32,768-32,767 or -2,147,483,648-2,147,483,647  2b ili 4b (short int i long int)
+short   -32,768-32,767  2b
+u int    0-65,535 or 0-4,294,967,295    2b ili 4b
+u short    0-65,535   2b
+long     -9223372036854775808 to 9223372036854775807   8b
+u long    0 to 18446744073709551615     8b
+float     1.2E-38 to 3.4E+38     6 decimala    4b
+double    15 decimala   8b
+long double   19 decimala 10b
+
+An enum is only guaranteed to be large enough to hold int values.
+The compiler is free to choose the actual type used based on the enumeration constants
+ defined so it can choose a smaller type if it can represent the values you define.
+ If you need enumeration constants that don't fit into an int you will need to use compiler-specific extensions
+  to do so.
+
+sizeof void is 1 and the sizeof void pointer is 4
+sizeof(*ptr) ako je int*ptr je onda velicine inta
+sizeof(ptr) je velicine pokazivaca
+
+int niz[10] -> size 10 * 4
+double niz[10] -> size 10 * 8
+
+char* string = "aaa";   -> 8 jer je pointer
+char string[20] = "aaa"; -> 20
+
+
+limits.h
+CHAR_BIT    :   8
+CHAR_MAX    :   127
+CHAR_MIN    :   -128
+INT_MAX     :   2147483647
+INT_MIN     :   -2147483648
+LONG_MAX    :   9223372036854775807
+LONG_MIN    :   -9223372036854775808
+SCHAR_MAX   :   127
+SCHAR_MIN   :   -128
+SHRT_MAX    :   32767
+SHRT_MIN    :   -32768
+UCHAR_MAX   :   255
+UINT_MAX    :   4294967295
+ULONG_MAX   :   18446744073709551615
+USHRT_MAX   :   65535
+
+
+
+
+
+
+#pragma pack(push,4)  //4-kolone
+typedef struct
+{
+    double A; // 8-byte
+    char B; // 1-byte
+} InfoData;
+#pragma pack(pop)
+
+
+#pragma pack instructs the compiler to pack structure members with particular alignment.
+Most compilers, when you declare a struct, will insert padding between members to ensure
+that they are aligned to appropriate addresses in memory (usually a multiple of the type's size).
+This avoids the performance penalty (or outright error) on some architectures associated with accessing
+ variables that are not aligned properly.
+
+  It may save RAM - which is often precious in a microcontroller.
+
+  However, due to alignment issues, packed structs can impact performance. For example:
+
+  When packed into bytes:
+
+  struct
+  {
+    uint8_t  a;
+    uint32_t b;
+    uint8_t  c;
+    uint8_t  d:
+  };
+
+  Will be stored as (not accounting for endianness):
+
+  a, b0, b1, b2, b3, c, d
+
+  However, many architectures require 32bit accesses to be aligned to 32bit addresses.
+   With the packed struct, the machine will have to make several byte accesses then stich them together again.
+
+typedef struct aa {
+    int v;
+    char ad[50];
+} M ;  -> 4 + 50 = 54 i moras dodati 2 da bude padding na int
+
+typedef struct aa {
+    int v;
+    char ad[50];
+    double w;
+} M ;   64 (4+4  + 50  + 8)
+
+
+
+UNIJE:
+Structures allocate enough space to store all their members, whereas unions can only hold one member value at a
+ time.
+ The members of a union share the same space in memory. This means that writing to one member overwrites the
+ data in all other members and that reading from one member results in the same data as reading from all other
+  members.
+  With a union, you're only supposed to use one of the elements, because they're all stored at the same spot.
+  This makes it useful when you want to store something that could be one of several types.
+
+union unionJob
+{
+   //defining a union
+   char name[32];
+   float salary;
+   int workerNo;
+} uJob;  -> 32
+
+However, the size of uJob is 32 bytes.
+ It's because the size of a union variable will always be the size of its largest element.
+ With a union, all members share the same memory.
+
+struct structJob
+{
+   char name[32];
+   float salary;
+   int workerNo;
+} sJob;  -> 40

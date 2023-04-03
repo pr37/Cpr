@@ -1,0 +1,144 @@
+Stack vs Heap, struktura RAM memorije, memory fragmentation, DRAM, SRAM, ROM, PROM, UV EPROM, EEPROM
+
+
+Koliko programu treba memorije:
+ tri grupe memorije: za staticke promenjive (traju do kraja programa, sve globalne + lokalne sa static, moze se
+  izracunati),
+  radna mem za fje (kompajler zna koliko treba za koju fju),
+   dinamicka memorija
+
+    Global Variables declared outside functions/methods are placed directly after each other starting at the beginning of RAM.
+    Local (automatic) variables declared in functions and methods are stored in the stack.
+    Variables allocated dynamically (vie the malloc() function or the new() operator) are stored in the heap.
+
+If you are using a real-time operating system (e.g. FreeRTOS), each thread will have its own stack.
+
+Stack grows in the direction opposite to heap.
+
+The stack is an area of RAM where a program stores temporary data during the execution of code blocks.
+The stack is statically allocated and operates on a “last in first out” basis.
+The life span of variables on the stack is limited to the duration of the function.
+As soon as the function returns, the used stack memory will be free for use by subsequent function calls.
+
+The types of data stored in the stack include:
+
+    local variables
+    return addresses
+    function arguments
+    compiler temporaries
+    interrupt contexts
+
+Stack memory has to be allocated statically by the developer.
+The stack usually grows downward in memory.
+If the memory area allocated for the stack isn’t large enough, the executing code writes to the area allocated
+ below the stack and an overflow situation occurs.
+As a result, underestimating stack usage can lead to serious runtime errors such as overwritten variables,
+ wild pointers, and corrupted return addresses. All of these errors can be difficult to find.
+At the same time, overestimating stack usage wastes memory resources, which increases cost.
+Determining worst-case maximum stack depth is useful in most embedded projects, as it allows you to allocate only as much RAM as needed for the stack while leaving the rest free for the developer to use in their application.
+
+
+The heap is an area of RAM that represents the dynamic memory of the system. When one module does not need
+its allocated memory anymore, the developer should return it to the memory allocator to be reused by some
+ other module. Dynamic memory makes memory sharing possible between different pieces of a program. As with
+ the stack allocation, it is important to minimize heap usage in small embedded systems; indeed, dynamic
+ memory and the heap can in many cases be considered optional in small embedded systems.
+
+Some examples of data that is placed on the heap include:
+
+    Transient data objects
+    C++ new/delete
+    C++ STL containers
+    C++ exceptions
+
+
+Memory fragmentation is when the sum of the available space in a memory heap is large enough to satisfy a memory allocation request but the size of any individual fragment (or contiguous fragments) is too small to satisfy that memory allocation request
+Imagine that you have a "large" (32 bytes) expanse of free memory:
+
+----------------------------------
+|                                |
+----------------------------------
+
+Now, allocate some of it (5 allocations):
+
+----------------------------------
+|aaaabbccccccddeeee              |
+----------------------------------
+
+Now, free the first four allocations but not the fifth:
+
+----------------------------------
+|              eeee              |
+----------------------------------
+Now, try to allocate 16 bytes. Oops, I can't, even though there's nearly double that much free.
+
+On systems with virtual memory, fragmentation is less of a problem than you might think,
+ because large allocations only need to be contiguous in virtual address space, not in physical address space.
+  So in my example, if I had virtual memory with a page size of 2 bytes then I could make my 16 byte
+  allocation with no problem. Physical memory would look like this:
+
+----------------------------------
+|ffffffffffffffeeeeff            |
+----------------------------------
+
+whereas virtual memory (being much bigger) could look like this:
+
+------------------------------------------------------...
+|              eeeeffffffffffffffff
+------------------------------------------------------...
+When memory is heavily fragmented, memory allocations will likely take longer because the memory allocator has to do more work to find a suitable space for the new object. If in turn you have many memory allocations (which you probably do since you ended up with memory fragmentation) the allocation time may even cause noticeable delays.
+
+What are good common ways to deal with memory fragmentation?
+
+Use a good algorithm for allocating memory. Instead of allocating memory for a lot of small objects,
+pre-allocate memory for a contiguous array of those smaller objects. Sometimes being a little wasteful
+when allocating memory can go along way for performance and may save you the trouble of having to deal
+with memory fragmentation.
+
+
+Static Random Access Memory (SRAM): Data is stored in transistors and requires a constant power flow.
+ Because of the continuous power, SRAM doesn’t need to be refreshed to remember the data being stored.
+ SRAM is called static as no change or action i.e. refreshing is not needed to keep the data intact.
+ It is used in cache memories.
+
+    Advantage: Low power consumption and faster access speeds.
+    Disadvantage: Fewer memory capacities and high costs of manufacturing.
+
+Dynamic Random Access Memory (DRAM): Data is stored in capacitors. Capacitors that store data in DRAM gradually
+discharge energy, no energy means the data has been lost. So, a periodic refresh of power is required in order
+ to function. DRAM is called dynamic as constant change or action(change is continuously happening) i.e.
+  refreshing is needed to keep the data intact. It is used to implement main memory.
+
+    Advantage: Low costs of manufacturing and greater memory capacities.
+    Disadvantage: Slow access speed and high power consumption.
+
+
+ROM stands for Read-only Memory.
+It is a type of memory that does not lose its contents when the power is turned off.
+ For this reason, ROM is also called non-volatile memory.
+
+PROM refers to the kind of ROM that the user can burn information into. In other words, PROM is a
+user-programmable memory.
+For every bit of the PROM, there exists a fuse. PROM is programmed by blowing the fuses. If the information
+ burned into PROM is wrong, that PROM must be discarded since its internal fuses are blown permanently.
+ For this reason, PROM is also referred to as OTP (One Time Programmable).
+
+EPROM (erasable programmable ROM) and UV-EPROM
+EPROM was invented to allow making changes in the contents of PROM after it is burned.
+In EPROM, one can program the memory chip and erase it thousands of times. This is especially necessary during the development of the prototype of a microprocessor-based project.
+A widely used EPROM is called UV-EPROM, where UV stands for ultraviolet. The only problem with UV-EPROM is that erasing its contents can take up to 20 minutes.
+
+EEPROM (electrically erasable programmable ROM)
+EEPROM has several advantages over EPROM, such as the fact that its method of erasure is electrical and therefore instant as opposed to the 20-minute erasure time required for UV-EPROM.
+In addition, in EEPROM one can select which byte to be erased, in contrast to UV-EPROM, in which the entire contents of ROM are erased.
+However, the main advantage of EEPROM is that one can program and erase its contents while it is still in the system board. It does not require the physical removal of the memory chip from its socket. In other words, unlike UV-EPROM, EEPROM does not require an external erasure and programming device.
+
+Flash Memory EPROM
+Since the early 1990s, Flash EPROM has become a popular user-programmable memory chip. and for good reasons.
+    First, the erasure of the entire contents takes less than a second, or one might say in a flash, hence its name, Flash memory.
+    In addition, the erasure method is electrical, and for this reason, it is sometimes referred to as Flash EEPROM. To avoid confusion, it is commonly called Flash memory.
+
+
+Mask ROM
+Mask ROM refers to a type of ROM in which the contents are programmed by the IC manufacturer. In other words, it is not a user-programmable ROM.
+It is common practice to use UV-EPROM or Flash for the development phase of a project, and only aﬁer the code/data have been ﬁnalized is the mask version of the product ordered.

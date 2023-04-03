@@ -1,0 +1,20 @@
+    const: The const qualifier is used to specify that a variable's value cannot be changed after it has
+    been initialized. For example, const int x = 5; creates a constant integer variable "x" that cannot be
+    modified later in the code.
+
+    volatile: The volatile qualifier is used to indicate that a variable's value may change unexpectedly,
+    and should therefore be read or written directly from memory each time it is accessed. This is often
+    used with hardware-related variables that can be changed by external factors like interrupts or other devices.
+
+    static: The static modifier is used to specify that a variable or function should have static storage duration, meaning that its value persists across multiple function calls. A static variable declared inside a function retains its value between function calls, while a static function is only visible within the source file where it is declared.
+
+    extern: The extern modifier is used to declare a variable or function that is defined in another source file. This allows multiple source files to share the same variable or function.
+
+    register: The register modifier is used to suggest to the compiler that a variable should be stored in a processor register for faster access. This is often used with frequently accessed variables in performance-critical code.
+
+    auto: The auto modifier is the default storage class for local variables in C, and is rarely used explicitly. It specifies that a variable has automatic storage duration, meaning that its value is only valid within the scope of the function where it is declared.
+
+    int far *ptr declaration in C is used to define a pointer to an integer that can access memory beyond the default data segment of the program.
+    The far keyword is a memory model specifier that was used in older versions of C, particularly in MS-DOS programming. It indicates that the pointer points to a location in memory that is outside of the default memory segment used by the program. This allows the program to access memory beyond the default data segment, which was limited in size on some platforms.
+
+    In addition to freeing the memory used by local variables, the stack is also used to keep track of the sequence of function calls in the program. When a function is called, its return address is pushed onto the stack, along with any function parameters and local variables. When the function returns, the stack is "popped" to restore the previous function's state, including the return address.

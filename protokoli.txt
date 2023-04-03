@@ -1,0 +1,274 @@
+CAN,LIN,SOME IP, Ethernet, Bluetooth, FLEXray
+
+
+CAN: CAN is a multi-master serial bus standard for connecting electronic control units (ECUs) also known as nodes
+A node may interface to devices from simple digital logic e.g. PLD, via FPGA up to an embedded computer
+ running extensive software
+two wire bus. The wires are a twisted pair with a 120 Ω (nominal) characteristic impedance.
+This bus uses differential wired-AND signals.
+Two signals, CAN high (CANH) and CAN low (CANL) are either driven to a "dominant" state with CANH > CANL,
+ or not driven and pulled by passive resistors to a "recessive" state with CANH ≤ CANL.
+ A 0 data bit encodes a dominant state, while a 1 data bit encodes a recessive state, supporting a wired-AND
+ convention,
+ which gives nodes with lower ID numbers priority on the bus.
+ high-speed CAN (bit speeds up to 1 Mbit/s on CAN, 5 Mbit/s on CAN-FD) 1 megabit per second (Mbps) = 1,000,000
+ bits per second
+ 1 Megabit (MBit / Mb) is 1000,000 bits, and 1 MegaByte (MByte / MB) is 1000,000 bytes, 1byte=8bit
+ low-speed or fault-tolerant CAN (up to 125 kbit/s), uses a linear bus, star bus or multiple star buses
+
+ Each node requires a
+ Central processing unit, microprocessor, or host processor
+     The host processor decides what the received messages mean and what messages it wants to transmit.
+     Sensors, actuators and control devices can be connected to the host processor.
+ CAN controller; often an integral part of the microcontroller
+     Receiving: the CAN controller stores the received serial bits from the bus until an entire message is
+      available, which can then be fetched by the host processor (usually by the CAN controller triggering an
+       interrupt).
+     Sending: the host processor sends the transmit message(s) to a CAN controller, which transmits the
+      bits serially onto the bus when the bus is free.
+Transceiver
+    Receiving: it converts the data stream from CAN bus levels to levels that the CAN controller uses.
+    It usually has protective circuitry to protect the CAN controller.
+    Transmitting: it converts the data stream from the CAN controller to CAN bus levels
+
+    CAN HIGH AND CAN LOW
+    CAN High and CAN Low are designed to work in a balanced configuration, where the voltage difference
+     between them determines the state of the bus. When there is no data transmission, both wires are at
+      the same voltage level, which is known as the recessive state. When a message is transmitted, the
+       voltage level on the CAN High wire is higher than the voltage level on the CAN Low wire, which is
+        known as the dominant state.
+
+ This arbitration method requires all nodes on the CAN network to be synchronized to sample every bit
+ on the CAN network at the same time.
+ This is why some call CAN synchronous.
+  Unfortunately the term synchronous is imprecise since the data is transmitted in an asynchronous format,
+   namely without a clock signal.
+
+    9-pin D-sub type male connector with the following pin-out:
+
+       pin 2: CAN-Low (CAN−)
+       pin 3: GND (ground)
+       pin 7: CAN-High (CAN+)
+       pin 9: CAN V+ (power)
+
+  CAN FRAME:
+rtr - (data or remote frame)
+
+  StartOfFrame | Id     | RTR  | DataLengthCode | Data Field       | CRC     | ACK | EndOfFrame
+     1 bit       11bit    1bit    4bita           0to8 byte=64 bit    15 bit           7bit
+
+ Smaller ID - higher priority
+ Arbitration in CAN:
+ Imas 3 noda, 3 ID-a
+ 1. 1111...   ovaj prvi gubi arb
+ 2. 1101...   ovaj drugi
+ 3. 1100...   ovaj pobedjuje, ostali cekaju da CAN predje u idle
+
+ CAN vs CAN FD:
+ CAN - 8byte po frejmu u data delu
+ CAN FD - 64 byte
+ Na 40m kabla CAN - 1mbps, CAN FD - 2-8 Mbps
+
+ ARBITRATION:  The arbitration process is the one that helps in deciding which node gets to play master for
+  a given point of time. Any node that transmits a logical "1" when another node transmits a logical 0
+  "drops out" or loses the arbitration. This means that the node that transmits the first "1" loses arbitration;
+  a dominant "0" always wins. The node that fails arbitration re-queues its message for re-transmission,
+ and the CAN frame bit-stream continues without error until only one node is left transmitting.
+
+
+ LIN:
+
+    Low cost option (if speed/fault tolerance are not critical)
+    Often used in vehicles for windows, wipers, air condition etc..
+    LIN clusters consist of 1 master and up to 16 slave nodes
+    Single wire (+ground) with 1-20 kbit/s at max 40 m bus length
+    Time triggered scheduling with guaranteed latency time
+    Variable data length (2, 4, 8 bytes)
+    LIN supports error detection, checksums & configuration
+    Operating voltage of 12V
+    Physical layer based on ISO 9141 (K-line)
+    Sleep mode & wakeup support
+    Most newer vehicles have 10+ LIN nodes
+
+LIN bus vs CAN bus
+
+    LIN is lower cost (less harness, no license fee, cheap nodes)
+    CAN uses twisted shielded dual wires 5V vs LIN single wire 12V
+    A LIN master typically serves as gateway to the CAN bus
+    LIN is deterministic, not event driven (i.e. no bus arbitration)
+    LIN clusters have a single master - CAN can have multiple
+    CAN uses 11 or 29 bit identifiers vs 6 bit identifiers in LIN
+    CAN offers up to 1 Mbit/s vs. LIN at max 20 kbit/s
+
+How does LIN bus work?
+
+LIN communication at its core is relatively simple:
+
+A master node loops through each of the slave nodes, sending a request for information -
+and each slave responds with data when polled. The data bytes contain LIN bus signals (in raw form).
+
+However, with each specification update, new features have been added to the LIN specification -
+making it more complex.
+LIN FRAME:
+Break: The Sync Break Field (SBF) aka Break is minimum 13 + 1 bits long (and in practice most often 18 + 2 bits). The Break field acts as a “start of frame" notice to all LIN nodes on the bus.
+Sync: The 8 bit Sync field has a predefined value of 0x55 (in binary, 01010101). This structure allows the LIN nodes to determine the time between rising/falling edges and thus the baud rate used by the master node. This lets each of them stay in sync.
+Identifier: The Identifier is 6 bits, followed by 2 parity bits. The ID acts as an identifier for each LIN message sent and which nodes react to the header. Slaves determine the validity of the ID field (based on the parity bits) and act via below:
+
+    Ignore the subsequent data transmission
+    Listen to the data transmitted from another node
+    Publish data in response to the header
+
+Typically, one slave is polled for information at a time - meaning zero collision risk (and hence no need for arbitration).
+Note that the 6 bits allow for 64 IDs, of which ID 60-61 are used for diagnostics (more below) and 62-63 are reserved.
+
+Data: When a LIN slave is polled by the master, it can respond by transmitting 2, 4 or 8 bytes of data. The data length can be customized, but it is typically linked to the ID range (ID 0-31: 2 bytes, 32-47: 4 bytes, 48-63: 8 bytes). The data bytes contain the actual information being communicated in the form of LIN signals. The LIN signals are packed within the data bytes and may be e.g. just 1 bit long or multiple bytes.
+
+Checksum: As in CAN, a checksum field ensures the validity of the LIN frame. The classic 8 bit checksum is based on summing the data bytes only (LIN 1.3), while the enhanced checksum algorithm also includes the identifier field (LIN 2.0).
+
+
+SOME IP: SOME/IP currently supports UDP and TCP.
+In the realm of Signal-based communication, the data is sent over the network whenever the data values
+are updated or modified. The sender is not concerned about whether the data is required by a node in the network.
+Such an arrangement may burden the nodes with unwanted data that they might never require.
+
+Fast forward to Service-oriented architecture, the sender sends the data only if a receiver needs it. Therefore,
+ in such an arrangement, the server has to be notified about the receivers that are waiting for the data. This
+  is merely one aspect of the service-based communication.
+SOME/IP can serialize the following basic datatypes (datatypes are encoded per default in network byte order/big
+endian but can also encoded in little endian):
+
+When we talk of highly automated driving, ADAS, connected cars, etc., service-oriented architecture (SOA) is
+a must-have. Powered by Ethernet and SOME/IP, SOA models the entire system as service interfaces. New software
+can be easily added to the system without worrying about the compatibility with others.
+
+While Ethernet provided the backbone and TCP & UDP the transport layer, a middleware was required for data
+serialization, remote call procedure, etc. And that’s precisely why SOME/IP was created!
+The popular Ethernet versions range in speed from 10 Mbps all the way up to 400 Gbps
+
+Some Key Features of SOME/IP:
+
+    Serialization: It is the way the data is represented in a data unit, which can be either a UDP or a TCP
+     message. When data is transmitted over network, the ECU reading the data might have a different architecture
+     , operating system, etc. inter-operability can be ensured only if there is a mechanism for a consistent data
+      transmission. SOME/IP allows for some serialization.
+
+    Remote Procedure Call (RPC): This is a method for remote invocation of functions as requested by the Client
+    ECU. It is a data exchange method employed by the client ECU when it requires some data from a server. An
+    RPC may or may not have a return value, i.e., the client can ask for data as a response or simply call a
+    function to perform some task at the server-end.
+
+    Service Discovery: The service discovery (SD) protocol is the backbone of SOME/IP concept. In a service-
+    oriented architecture, it is imperative for the service (functional entity- methods, events or fields) to
+    be discoverable. The SOME/IP SD protocol manages this aspect- whether to offer a service or stop it from
+    being available.
+
+    Publish/Subscribe: A client can subscribe to the content of the server so that it can receive the updated
+     data from the server dynamically. Publish/subscribe feature of SOME/IP deduces which data (event/field)
+     a client needs and shares the same. Pub/Sub is managed by SOME/IP SD.
+
+The Server ECU provides a service instance which implements a service interface. The client ECU can use
+this service instance using SOME/IP to request the required data from the server. The Service Discovery
+protocol has two mechanisms in place by which a client knows about the available services.
+
+The first mechanism is the ‘Offer Service’ using which the server is able to provide the available services
+ to the network. The other one is ‘Find Service’, which enables the clients to request for the available services.
+
+In case of UDP, data is sent to all the clients who are active subscribers. The data transfer is usually sent
+via unicast, multicast or broadcast. However, with TCP, the requesting client must establish a connection with
+the server for data transfer.
+
+
+
+SOME/IP can serialize the following complex datatypes:
+
+    struct: a parameter that combines a predefined list of parameters. A struct can start with an optional
+    length field counting all bytes of the struct following the length field.
+    string: fixed length or dynamic length character strings transporting ascii, UTF-8, or UTF-16 characters.
+     For dynamic length strings, the string starts with a big-endian encoded length field counting the bytes
+     the string characters use.
+    array: a parameter that contains a repetition of the same parameter type. This can be predefined number
+    or dynamic number of parameters. For arrays with dynamic length a length field is used.
+    enumeration: an uint with the option of naming different values.
+    bitfield: 8, 16, or 32bit parameter, with each bit representing a boolean. Each boolean can have a name
+    as well as a name for the True and False value each.
+    union: a parameter that can carry a parameter of a predefined parameter type, which is determined at the
+     runtime. The serialization uses a length field, type field, and the data of the parameter.
+SOME/IP services support the following messages:
+
+    Request/Response Methods: A request sent from a client to the server and a response sent back from server to client. Additionally, SOME/IP allows error responses to be sent back from server to client instead of the regular response. This feature might be used to implement a different payload format in error cases.
+    Fire and Forget Methods: A request is sent from a client to the server.
+    Event: An event is sent from the server to a relevant clients. Which client needs this event will be determined via SOME/IP-SD.
+    Field: A field can have an option notifier (event to be sent cyclically or on-change), an optional setter (a request/response method to update the field), and an optional getter (a request/response method to read out the current value of the field.)
+
+Request/Response Method
+
+    A request is a message sent from the client to the server for calling a function.
+    Response is the message sent from the server to the client depicting the result of the function invoked by the client
+
+Fire and Forget Method
+
+    A message is sent to the server from the client to call a function
+    No response is returned from the server
+
+Services: Event
+
+    An event is a callback sent from the server to the client either cyclically or when a change in the server attributes occur
+    The server notifies about the change only to those clients who have previously subscribed
+    A notification of event is sent to the client every time the event occurs
+
+Services: Field
+
+    Field is a property of service that can be remotely accessed using Getters/setters.
+    Getter is the method to read field value
+    Setter is the method to set the field value
+    When a field’s value changes, a notification event is sent out by the notifier.
+
+
+
+FlexRay: competes with flexible data-rate CAN (CAN FD) and high-speed CAN (HS-CAN) in time-critical
+ applications but not with regular CAN or LIN buses (Table 1).
+
+The features of FlexRay include:
+
+    Bit rates of up to 10 Mbps with half-duplex bus access
+    ISO standard 17458
+    Supports fault-tolerant mechanisms
+    Support for time-triggered and event-triggered modes
+    Implemented in a variety of single and dual-channel topologies
+    For critical apps, powertrain and chasis
+
+Although FlexRay is the most expensive of the three buses, several aspects of its design are intended to
+ help control costs. For example, it uses inexpensive unshielded twisted pair (UTP) cabling and differential
+ signaling on each pair of wires to reduce the effects of external noise on the network. Single and dual-channel
+ FlexRay networks use one or two pairs of wires.
+
+To prevent bus contention, where multiple nodes try to communicate at the same time, FlexRay uses time-division
+multiple-access (TDMA) technology. For TDMA to be effective, every node in a FlexRay network must be synchronized
+ to a common clock. Each node has an assigned time slot for communicating with the network. TDMA ensures the
+ consistent timing needed to provide deterministic communications.
+
+
+ Slojevi 	                        Jedinica 	             Protokoli
+
+ Aplikacija
+ Mrežni procesi vezani za aplikaciju 	    Podatak 	HTTP, FTP, Telnet, DNS, DHCP, POP/SMTP
+
+ Prezentacija
+ Enkripcija i kodiranje podataka 	        Podatak
+
+ Sesija
+ Uspostavljanje sesije krajnjih korisnika 	Podatak 	NetBIOS, PAP, CHAP, SSH
+
+ Transport
+ Veza, pouzdanost, transport 	            Segment
+ Datagram 	TCP, UDP
+
+ Mreža
+ Logičko adresiranje i rutiranje 	         Paket 	IP, ICMP, ARP, RARP
+
+ Sloj veze
+ Fizičko adresiranje, pristup medijumu 	     Frejm (Okvir) 	PPP, HDLC, Frame Relay
+
+ Fizički sloj
+ Transmisija signala 	                     Bit 	Token Ring
+ IEEE 802.11

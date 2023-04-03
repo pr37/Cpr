@@ -1,0 +1,26 @@
+CISC architecture:
+
+    Emphasizes complex instructions that can perform multiple operations in a single instruction
+    Has a large instruction set, which makes them more flexible but also more complex to design and implement
+    Examples of CISC architectures include the x86 architecture used in most desktop and laptop computers
+
+RISC architecture:
+
+    Uses a simpler instruction set that focuses on performing a single operation at a time
+    Has a smaller instruction set, which makes them easier to design and implement but also less flexible
+    Examples of RISC architectures include ARM and PowerPC
+
+Both architectures have their own advantages and disadvantages, and modern processors often use a combination of
+ CISC and RISC techniques to achieve the best balance of performance and complexity.
+
+RISC architecture is commonly used in embedded systems due to its simplicity, efficiency, and low power consumption.
+ This is because embedded systems often have limited resources such as memory and power, and RISC architectures
+ are designed to be more efficient with these resources.
+
+In addition, many RISC architectures are highly customizable, which allows them to be tailored to specific
+applications and optimized for specific tasks. This makes them well-suited for embedded systems, which often have
+unique requirements and constraints.
+
+However, it's worth noting that some embedded systems may also use CISC architectures, especially in cases where
+compatibility with existing software or hardware is a priority. Ultimately, the choice of architecture will depend
+on the specific requirements and constraints of the embedded system being developed.

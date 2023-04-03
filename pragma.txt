@@ -1,0 +1,16 @@
+pragma se koristi da bi se neki featuri ukljucili iskljucili i zavise od kompajlera
+
+#pragma startup ime_fje  // fja koja se izvrsi pre mejna
+#pragma exit ime_fje //fja koja se izvrsi posle mejna
+ovako ne radi u gcc nego moras da pises:
+
+void __attribute__((constructor)) ime_fje();  //pre mejna
+void __attribute__((destructor)) ime_fje();   //posle mejna
+
+
+
+#pragma warn -rvl   //suppress warning da nasa fja ne vraca vrednost
+#pragma warn -par   // fja ne koristi parametar
+#pragma warn -rch   // za mrtvi kod
+
+#pragma warn +nest  //prvo resi ovaj warning pa idi dalje

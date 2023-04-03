@@ -1,0 +1,46 @@
+-pragme
+-arduino
+
++strukture podataka, strukture, unije, liste, stack/queue/deck, drvo, matrice, nizovi
+-pokazivaci, (void *), sabiranje oduzimanje pokazivaca, p++, p1-p2=1, pok na fje
+-32 kljucne reci u C
++static, outside of function, inside, static fun?
++ hex binary decimalni octal
++errors in C
++makroi, setovanje bita
+-stdint.h, zasto, opsezi vrednosti, bajt bit itd, pokretni zarez floatovi
+-signed a; unsigned b;, 6u + 16
++bitwise operacije i gejtovi
++stringovi
++callback fje i pointeri na fje
+-petlje
++bit field
+-void
++dijagram masine stanja
+-printf specifikatori, scanf
++CAN,LIN,SOME IP, Ethernet, Bluetooth, FLEXray
++ISO26262
+-OBD2
+-CAPL, CANoe
+-mikrokontroleri (njihove komponenete) i mikroprocesori, registri, portovi, arduino
++RTOS
++enumi
++sizeof struktura, array, enuma, padding, pragma(1) pack, sizeof void is 1 and the sizeof void pointer is 4
++Endiannes
++Stack vs Heap, struktura RAM memorije, memory defragmentation, DRAM, SRAM, ROM, PROM, UV EPROM, EEPROM
++predprocesiranje, kompajliranje, linkovanje
++register a = 1;int far *ptr;
++ --i, i--
++ inline fje
++PWM, tranzistori, mosfet, otpornik, kondenzator, kalem, relej
++strujni/naponski razdelnik
++omov zakon
++grecov spoj, integrator, diferencijator
++A/D i D/A konverzija
++protokoli SPI, I2C, UART, RS232
++Interrupt Service Routines
++osciloskop, unimer, ampermetar, voltmetar
++koderi dekoderi mux demux
++CISC vs RISC
++signal pa napisi fju na osnovu tog signala, fibonacci, palindrom, setovanje bitova, lokalni min max niza, min max niza
++sortiranje -funkcije (vraca niz)

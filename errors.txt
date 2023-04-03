@@ -1,0 +1,26 @@
+Syntax Error, Run Time Error, Logical Error, Semantic Error, and Linker Error
+
+syntax err - compiler err
+
+run time errors are: number not divisible by zero, array index out of bounds, string index out of bounds
+                    Memory Leaks, Undefined Variables
+
+    A memory leak in C typically happens when the pointer loses its initial allocated address due to which the pointed memory block cannot be accessed or cannot de-allocated
+
+    Assigning a different address value to the pointer variable before de-allocating the memory block already pointed by the pointer.
+    If a pointer variable goes out of scope, it may lead to a memory leak.
+    Not deallocating the memory before the program execution finishes.
+    If an error occurred during the de-allocation of the memory block.
+    Writing the free() statement immediately after the malloc() or calloc() function is a good practice to avoid memory leaks.
+    We should assign NULL to the pointer variable after using the free() statement to avoid dangling pointers.
+
+
+ Logical errors are those errors in which we think that our code is correct, the code compiles without any error and gives no error while it is running, but the output we get is different from the output we expected.
+
+ semantic errors are: use of un-initialized variables, type compatibility, and array index out of bounds. compiler err
+
+ linker error if we have imported an incorrect header file in the code, we have a wrong function declaration
+The error message indicates that the linker is unable to find fo and ba. With the extern declaration you have told the compiler that the variables will exist in some other translation unit, but they don't.
+
+ Syntax errors, linker errors, and semantic errors can be identified by the compiler during compilation. Logical errors and run time errors are encountered after the program is compiled and executed.
+

@@ -1,0 +1,52 @@
+realtime - determinizam - moraz da izvrsis nesto u odredjenom vremenskom okviru i da garantujes da ce se to izvrsiti
+ne as fast as possible but as fast as specified, missing the timeline - someone gets hurt
+
+RTOSes are designed to handle multiple processes at one time, ensuring that these processes respond to
+ events within a predictable time limit. Processing in an RTOS occurs within defined time constraints
+ and monitors the priority of tasks. An RTOS is also able to make changes to task priority.
+ Systems that are event-driven often switch between tasks based on priority.
+
+ A STRUCTURE FOR ENFORCING TIMING
+
+ sceduling: os decides which task runs during the tick
+ RTOS ima taskove
+ taskovi sheduler moze biti semafor,queue
+  svaki task ima svoj prioritet
+RTOS is good for paralel workloads
+
+ - bare metal super loop (arduino) vs concurent task exec in rtos
+
+ Usually, RTOSes provide the following functionality:
+
+     multitasking, where tasks are rapidly switched between to give the impression that multiple programs
+      are executing concurrently;
+     process thread prioritization; and
+     a sufficient number of interrupt levels.
+
+RTOSes are subdivided into soft and hard real-time systems. A soft RTOS is designed to operate within a few
+hundred milliseconds, while a hard RTOS is designed to provide predictable response times within tens of
+milliseconds.
+
+FreeRTOS from Amazon Web Services. This open source microcontroller OS is designed to simplify the development,
+ security, deployment and maintenance of microcontroller edge devices.
+
+FreeRTOS is a popular real-time operating system that uses a priority-based preemptive scheduling algorithm
+for task scheduling.
+
+FreeRTOS maintains a list of ready-to-run tasks in priority order, with the highest-priority task at the
+ front of the list. When the CPU is available, the scheduler selects the highest-priority task from the list
+ and switches the CPU to that task.
+
+If a higher-priority task becomes ready to run while a lower-priority task is currently executing, FreeRTOS
+ will preempt the lower-priority task and switch to the higher-priority task. This ensures that the highest
+ -priority task always gets the CPU time it needs, even if a lower-priority task is currently running.
+
+FreeRTOS also supports time slicing, where each task is assigned a time slice, and the CPU executes each task
+for a fixed amount of time before switching to the next task in the list. This ensures that all tasks get some C
+PU time and prevents any single task from monopolizing the CPU.
+
+FreeRTOS allows tasks to have the same priority level, and in such cases, it uses a round-robin scheduling
+ algorithm to ensure that all tasks with the same priority get an equal share of the CPU time.
+
+Overall, FreeRTOS provides a flexible and efficient priority-based preemptive scheduling algorithm that ensures
+timely execution of tasks while meeting the requirements of the real-time application.

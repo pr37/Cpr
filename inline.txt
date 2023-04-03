@@ -1,0 +1,51 @@
+By declaring a function inline, you can direct GCC to make calls to that function faster.
+ One way GCC can achieve this is to integrate that function's code into the code for its callers.
+  This makes execution faster by eliminating the function-call overhead; in addition, if any of the actual
+  argument values are constant, their known values may permit simplifications at compile time so that
+  not all of the inline function's code needs to be included. The effect on code size is less predictable;
+  object code may be larger or smaller with function inlining, depending on the particular case.
+
+  So, it tells the compiler to build the function into the code where it is used with the intention
+  of improving execution time.
+
+  If you declare Small functions like setting/clearing a flag or some bit toggle which are performed repeatedly,
+  inline,
+  it can make a big performance difference with respect to time, but at the cost of code size.
+
+
+  non-static inline and Static inline
+
+  Again referring to gcc.gnu.org,
+
+      When an inline function is not static, then the compiler must assume that there may be calls
+       from other source files; since a global symbol can be defined only once in any program, the
+       function must not be defined in the other source files, so the calls therein cannot be integrated.
+        Therefore, a non-static inline function is always compiled on its own in the usual fashion.
+
+
+extern inline?
+
+Again, gcc.gnu.org, says it all:
+
+    If you specify both inline and extern in the function definition, then the definition is used only
+     for inlining. In no case is the function compiled on its own, not even if you refer to its address
+      explicitly. Such an address becomes an external reference, as if you had only declared the function,
+       and had not defined it.
+
+This combination of inline and extern has almost the effect of a macro. The way to use it is to put a
+function definition in a header file with these keywords, and put another copy of the definition (lacking
+inline and extern) in a library file. The definition in the header file causes most calls to the function
+to be inlined. If any uses of the function remain, they refer to the single copy in the library.
+
+
+#include<stdio.h>
+inline int mul(int a, int b) //inline function declaration{
+   return(a*b);
+}
+int main(){
+   int c;
+   c=mul(2,3);
+   printf("Multiplication:%d
+",c);
+   return 0;
+}

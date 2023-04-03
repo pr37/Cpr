@@ -1,0 +1,58 @@
+-PWM, tranzistori, mosfet, otpornik, kondenzator, kalem, relej
+
+PWM - impulsno sirinska modulacija - duty cycle faktor ispune 0-100%, 0-5V na 50% on to vidi kao 2.5V
+koristi se za kontrolu led sijalica
+ motora itd
+
+ kondenzator - se suprotstavlja nagloj pada napona, skladisti energiju u vidu nosilaca elektrisanja izmedju dve ploce
+
+ kalem - skladisti energiju u vidu el magnetnog polja koje se indukuje oko njega, on se protivi naglim promenama  struje
+
+ relej - el magnetni prekidac, kad zelis da galvanski izolujes dva kola
+
+
+-strujni/naponski razdelnik
+Разделник напона чине два редно везана отпорника прикључена на генератор.
+U1 = E* R1/(R1+R2)     U2=E* R2(R1+R2)
+Наппн на свакпм птппрнику је маои пд наппна редне везе
+Наппн на птппрнику веће птппрнпсти је већи пд наппна на птппрнику маое птппрнпсти
+Струјни разделник чине два паралелно везана отпорника, који деле струју
+I1 = I R2/(R1+R2)       I2 = I R1/(R1+R2)
+Струја крпз билп кпји птппрник је маоа пд укупне струје
+Струја крпз птппрник веће птппрнпсти је маоа пд струје крпз птппрник маое
+птппрнпсти
+
+-omov zakon
+Омов закон каже да је струја која пролази кроз проводник између две тачке директно пропорционална напону на истим тачкама тог проводника.
+  I = U\R
+
+-grecov spoj, integrator, diferencijator
+-A/D i D/A konverzija
+-protokoli SPI, I2C, UART, RS232
+SPI, I2C, and UART are ideal for communication between microcontrollers and between microcontrollers and sensors
+where large amounts of high speed data don’t need to be transferred.
+The bits of data can be transmitted either in parallel or serial form. In parallel communication, the bits of data
+ are sent all at the same time, each through a separate wire.
+In serial communication, the bits are sent one by one through a single wire.
+
+SPI - sinhrona serijska, do 10Mbps, master-slave
+    No start and stop bits, so the data can be streamed continuously without interruption
+    No complicated slave addressing system like I2C
+    Higher data transfer rate than I2C (almost twice as fast)
+    Separate MISO and MOSI lines, so data can be sent and received at the same time
+
+    Uses four wires (I2C and UARTs use two)
+    No acknowledgement that the data has been successfully received (I2C has this)
+    No form of error checking like the parity bit in UART
+    Only allows for a single master
+
+I2C - za komunikaciju izmedju chipova, asinhrona, treba 2 zice za 1kontroler i 1008 periferija(senzor npr)
+    moze imati vise mastera
+
+UART - asinhrona (onaj ko salje i ko prima ne dele clock signal pa moraju da se dogovore oko baud rate)
+ serijska komunikacija,
+ dve zice, start i stop bit za frejm i ima bit za detekciju greske, zamenili ga ovi drugi protokoli
+
+
+-osciloskop, unimer, ampermetar, voltmetar
+-koderi dekoderi mux demux

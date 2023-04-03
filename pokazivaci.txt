@@ -1,0 +1,180 @@
+int * prt;
+int const * cptr;
+ptr = &cptr; //warning
+ptr = (int *)cptr; //mora se kastovati
+
+const * -> ne moze se menjati vrednost na koju pokazuje
+* const -> ne moze se menjati adresa na koju pokazuje
+
+
+int niz[3] = {1,2,3};
+    int * ptr = &niz[0];
+    printf("%d", *(++ptr));  // 2
+
+int niz[4] = {1,2,3,4};
+    int  *ptr1 = &niz[0];
+    int  *ptr2 = &niz[3];
+    printf("%d", (int)(ptr2-ptr1)); // 3 oduzimanje pokazivaca samo ako su istog tipa, udaljenost adresa
+    if (ptr2 > ptr1) //rezultat ima smisla samo ako pokazuju na isti niz
+
+    u <stddef.h> ima ptrdiff_t koji kaze kojeg je tipa razlika pokazivaca
+
+
+a[b] = * (a+b)
+
+x = p[4]
+x = 4[p] //oba su validna
+
+127 nivoa indirekcije - koliko **** moze na pokazivac
+
+prosledjivanje pokazivaca po referenci:
+void foo(int ** x) {
+    *x = &nesto;
+    **x = vrednost;
+}
+
+int len = sizeof(niz)/sizeof(niz[0]); //ne moze ako je int * niz
+
+int niz[5] = {};  //niz od 5 nula
+int niz[100] = { [54]=5, [99]=7}; //init samo neke vrednosti
+
+int matrica[redovi][kolone]
+
+typedef int redovi[4];
+redovi kolone[5];
+
+za visedimenz nizove kad ih prosledjujes fji (int niz[][7])
+
+
+POKAZIVACI NA FJE:
+
+int (*fja) (param1,param2);
+
+poziv fje:
+fja(p1,p2);
+(*fja)(p1,p2);
+
+nizovi pokazivaca na fje:
+int*  (*fje[3]) (p1,p2) = { fja1, fj2, fja3};
+
+za masine stanja:
+
+int (*fje_stanja[3]) (p1) = { stanje1, stanje2, stanje3};
+int novo_stanje(int trenutno_stanje, int input) {
+    return fje_stanja[trenutno_stanje] (input);
+}
+
+//CALLBACK FJE se koriste da ne bismo morali da hardkodujemo print_twice u drugu ovu
+//nego moze da se ona menja pa da se prosledjuje kao parametar tj pokazivac na fju
+void print_twice(int num) {
+    printf("%d * 2 = %d\n", num, num * 2);
+}
+
+void call_callback(void (*callback)(int), int num) {
+    callback(num);
+}
+
+
+The size of the function pointer akicja would also depend on your system architecture, but it is typically
+4 or 8 bytes on most modern systems.
+
+
+char *ptr = "Hello World";
+	printf(ptr+2); //llo...
+
+ char *ptr = "Hello World";
+    	printf("%c",*(ptr+2)); //l
+
+
+
+
+
+(a) int a; // An integer
+
+(b) int *a; // A pointer to an integer
+
+(c) int **a; // A pointer to a pointer to an integer
+
+(d) int a[10]; // An array of 10 integers
+
+(e) int *a[10]; // An array of 10 pointers to integers
+
+(f) int (*a)[10]; // A pointer to an array of 10 integers
+
+(g) int (*a)(int); // A pointer to a function a that takes an integer argument and returns an integer
+
+(h) int (*a[10])(int); // An array of 10 pointers to functions that take an integer argument and return an integer
+
+Accessing fixed memory locations
+
+10. Embedded systems are often characterized by requiring the programmer to access a specific memory location.
+ On a certain project it is required to set an integer variable at the absolute address 0x67a9 to the value
+ 0xaa55. The compiler is a pure ANSI compiler. Write code to accomplish this task.
+
+This problem tests whether you know that it is legal to typecast an integer to a pointer in order to access an
+absolute location. The exact syntax varies depending upon one’s style. However, I would typically be
+looking for something like this:
+
+int *ptr;
+ptr = (int *)0x67a9;
+*ptr = 0xaa55;
+
+A more obfuscated approach is:
+*(int * const)(0x67a9) = 0xaa55;
+
+
+int8_t o = 5;
+    int8_t *i = &o;
+    int8_t **pok2 = &i;
+    printf("\n%d", **pok2); //5
+
+    ///////////////
+#define R 10
+#define C 20
+
+int main()
+{
+   int (*p)[R][C];
+   printf("%d",  sizeof(*p)); ///800
+   getchar();
+   return 0;
+}
+
+
+/////////////////////
+
+int a[5] = {1,2,3,4,5};
+    int *ptr = (int*)(&a+1);
+    printf("%d %d", *(a+1), *(ptr-1)); //2 5
+    return 0;
+
+/////////////////////
+void f(char**);
+int main()
+{
+    char *argv[] = { "ab", "cd", "ef", "gh", "ij", "kl" };
+    f(argv);
+    return 0;
+}
+void f(char **p)
+{
+    char *t;
+    t = (p += sizeof(int))[-1];
+    printf("%s\n", t);   //gh
+}
+
+///////////////////////
+int main() {
+    int arr[3] = {1, 2, 3};
+    int *p = arr; // p points to the first element of the array
+    printf("%d\n", *p++); // prints 1, then increments p to point to the next element
+    printf("%d\n", *++p); // increments p to point to the next element, then prints 3
+    printf("%d\n", (*p)++); // dereferences p to get the value 3, increments it to 4, and prints 3
+    printf("%d\n", *p); // prints 4
+    return 0;
+}
+
+////////////////////////
+int i[3] = {1,2,3};         //pokazivac na ceo jednodimenzionalni niz
+    int (*p)[3] = &i;
+    printf("%d", (*((*p)+1)));  //*p adresa, **p vrednost

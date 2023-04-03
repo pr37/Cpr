@@ -1,0 +1,1 @@
+int_fast8_t is useful when you need to perform operations on large numbers of these integer types and performance is critical.

@@ -1,0 +1,54 @@
+file3.h
+
+extern int global_variable;  /* Declaration of the variable */
+
+file1.c
+
+#include "file3.h"  /* Declaration made available here */
+#include "prog1.h"  /* Function declarations */
+
+/* Variable defined here */
+int global_variable = 37;    /* Definition checked against declaration */
+
+int increment(void) { return global_variable++; }
+
+file2.c
+
+#include "file3.h"
+#include "prog1.h"
+#include <stdio.h>
+
+void use_it(void)
+{
+    printf("Global variable: %d\n", global_variable++);
+}
+
+prog1.h
+
+extern void use_it(void);
+extern int increment(void);
+
+prog1.c
+
+#include "file3.h"
+#include "prog1.h"
+#include <stdio.h>
+
+int main(void)
+{
+    use_it();
+    global_variable += 19;
+    use_it();
+    printf("Increment: %d\n", increment());
+    return 0;
+}
+
+//////////////////////////////////
+You need to declare it in the .h file
+
+extern char cmdval[128];
+
+And then define the value in first.c;
+
+char cmdval[128];
+///////////////////////////////////////////

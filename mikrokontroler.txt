@@ -1,0 +1,53 @@
+A microcontroller reads or writes data from a pin or port using the Input/Output (I/O) operations provided
+ by the microcontroller's hardware. The specific method of accessing the I/O registers will depend on the
+  microcontroller architecture and the programming language or development environment being used, but in general,
+  the process involves the following steps:
+
+    Configuring the I/O pin or port: Before reading or writing data from an I/O pin or port, you need to configure
+    it for the appropriate input or output mode. This is typically done by setting the direction register or mode
+     register of the port or pin, which tells the microcontroller whether the pin or port is configured as an input
+      or an output.
+
+      PISANJE ILI
+      CITANJE I
+
+    Reading from a pin or port: To read data from an input pin or port, you can simply read the value of the
+    corresponding register. The value of the register reflects the current state of the pin or port.
+    Some microcontrollers also allow you to enable interrupts on certain pins or ports, which will trigger
+    an interrupt handler function when the state of the pin or port changes.
+
+    Writing to a pin or port: To write data to an output pin or port, you can simply write the desired value
+    to the corresponding register. The value you write will be output on the pin or port. Some microcontrollers
+     also provide additional features like pull-up or pull-down resistors, which can be enabled or disabled as
+     needed.
+     *((int8_t *)0x234234) |= maska;
+
+
+To read the value from the 3rd bit of an 8-bit port on a microcontroller, you can use a bitwise AND operator
+and a bit shift operation as follows:
+
+    First, read the value of the 8-bit port into a variable, let's call it "port_value".
+
+    To extract the value of the 3rd bit from the "port_value", perform a bitwise AND operation with a mask that
+    has the 3rd bit set to 1 and all other bits set to 0. The mask for the 3rd bit would be: 0b00000100.
+
+    Here's the code to perform the bitwise AND operation:
+
+    arduino
+portval = *((int8_t *)0x11234) & mask
+uint8_t third_bit_value = port_value & 0b00000100;
+tbv = tbv >> 3;
+
+This will result in a value that has the 3rd bit set to either 0 or 1.
+
+Since we only want the value of the 3rd bit, we need to shift it to the least significant bit position.
+We can do this using a bitwise right shift operation by 2 bits.
+
+Here's the code to perform the bitwise right shift operation:
+
+makefile
+
+third_bit_value = third_bit_value >> 2;
+
+This will shift the value of the 3rd bit to the least significant bit position, resulting in either a value
+of 0 or 1, depending on whether the 3rd bit was set or not.

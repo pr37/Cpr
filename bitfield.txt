@@ -1,0 +1,19 @@
+bit field is a way to define a structure member that has a specific number of bits. Bit fields are useful for packing multiple values into a single integer or character, which can be more memory-efficient and faster than using separate variables for each value.
+
+To define a bit field in C, you use the : syntax to specify the number of bits that the member should occupy. For example, the following code defines a struct with three bit fields:
+
+arduino
+
+struct Flags {
+    unsigned int flag1 : 1;
+    unsigned int flag2 : 2;
+    unsigned int flag3 : 3;
+};
+
+In this case, flag1 occupies 1 bit, flag2 occupies 2 bits, and flag3 occupies 3 bits.
+
+When you use bit fields, the sizeof operator returns the size of the entire structure, rounded up to the nearest byte. However, the actual size of the structure may be smaller than this, depending on the number of bits used in each member. For example, in the above Flags struct, the sizeof operator would return 4, even though the actual size of the structure would be 2 bytes (since the total number of bits used by the bit fields is 6, which fits into 2 bytes).
+
+Bit fields are typically used in low-level programming and embedded systems, where memory efficiency is important. They can also be used to pack data into a binary format for communication between systems or devices. However, bit fields can be tricky to work with, since the ordering and packing of bits in memory can be implementation-dependent and may not always match your expectations. It's important to carefully test and validate any code that uses bit fields.
+
+Nije prenosiv kod i pravi problem nekim komplajlerima

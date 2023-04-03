@@ -1,0 +1,58 @@
+Static
+
+6. What are the uses of the keyword static?
+
+This simple question is rarely answered completely. Static has three distinct uses in C:
+
+(a) A variable declared static within the body of a function maintains its value between function invocations.
+(b) A variable declared static within a module [1], (but outside the body of a function) is accessible by all
+ functions within that module. It is not accessible by functions within any other module. That is, it is a
+ localized global.
+(c) Functions declared static within a module may only be called by other functions within that module.
+That is, the scope of the function is localized to the module within which it is declared.
+
+- function static var
+- datotecki static var
+- niko drugi ne moze da je vidi
+
+Most candidates get the first part correct. A reasonable number get the second part correct,
+while a pitiful number understand answer (c). This is a serious weakness in a candidate,
+since they obviously do not understand the importance and benefits of localizing the scope of both data and code.
+
+ static unsigned long int *x[N];
+  the keyword static does not apply to
+  the unsigned long int objects that the
+  pointers in x point to. Rather, it applies
+  to x itself:
+
+
+
+
+
+int counter = 0;
+
+void activate_output(void) {
+    if (signal_value) {
+        //aktiviraj..
+    }
+}
+
+int signal_value(void) {
+    counter = counter == 7 ? 0 : counter; //sa 80ms se zavrsava pa obrni
+    switch (counter) {
+        case 1:
+        case 2:
+        case 4: {
+            counter++; //poziva je na periodi pa uvecaj
+            return 1;
+        }
+        break;
+        default: {
+            counter++;
+            return 0;
+        }
+    }
+}
+
+
+

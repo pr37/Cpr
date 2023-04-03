@@ -1,0 +1,39 @@
+const u parametrima fje kaze da fja obecava da nece promeniti taj parametar
+
+Const
+
+7. What does the keyword const mean?
+
+As soon as the interviewee says ‘const means constant’, I know I’m dealing with an amateur.
+Dan Saks has exhaustively covered const in the last year, such that every reader of ESP should
+be extremely familiar with what const can and cannot do for you. If you haven’t been reading that column,
+ suffice it to say that const means “read-only”. Although this answer doesn’t really do the subject justice,
+  I’d accept it as a correct answer. (If you want the detailed answer, then read Saks’ columns – carefully!).
+
+
+If the candidate gets the answer correct, then I’ll ask him these supplemental questions:
+
+What do the following incomplete [2] declarations mean?
+
+const int a;
+int const a;
+const int *a;
+int * const a;
+int const * a const;
+
+The first two mean the same thing, namely a is a const (read-only) integer. The third means a
+is a pointer to a const integer (i.e., the integer isn’t modifiable, but the pointer is).
+The fourth declares a to be a const pointer to an integer (i.e., the integer pointed to by a is modifiable,
+ but the pointer is not). The final declaration declares a to be a const pointer to a const integer
+  (i.e., neither the integer pointed to by a, nor the pointer itself may be modified).
+If the candidate correctly answers these questions, I’ll be impressed.
+
+Incidentally, one might wonder why I put so much emphasis on const, since it is very easy to write a
+correctly functioning program without ever using it. There are several reasons:
+
+(a) The use of const conveys some very useful information to someone reading your code.
+ In effect, declaring a parameter const tells the user about its intended usage.
+ If you spend a lot of time cleaning up the mess left by other people, then you’ll quickly learn to appreciate this extra piece of information. (Of course, programmers that use const, rarely leave a mess for others to clean up…)
+(b) const has the potential for generating tighter code by giving the optimizer some additional information.
+(c) Code that uses const liberally is inherently protected by the compiler against inadvertent coding constructs
+that result in parameters being changed that should not be. In short, they tend to have fewer bugs.
